@@ -14,8 +14,10 @@ import Spanner from "@google-cloud/spanner";
  * @param {String} [params.token] - Anonymous cart token
  * @returns {Promise<Object>|undefined} - A Cart document, if one is found
  */
-export default async function anonymousCartByCartId(context, { cartId, cartToken } = {}) {
-  Logger.info("hi4", {cartId});
+export default async function anonymousCartByCartId(
+  context,
+  { cartId, cartToken } = {}
+) {
   const { collections } = context;
   const { Cart } = collections;
 
@@ -23,37 +25,41 @@ export default async function anonymousCartByCartId(context, { cartId, cartToken
     throw new ReactionError("invalid-param", "You must provide a cartId");
   }
 
+  const anonymousAccessToken = hashToken(cartToken);
   // Creates a client
-  const spanner = new Spanner.Spanner({ projectId: process.env.SPANNER_PROJECT });
+  Logger.debug("anonymousCartByCartId starting", { cartId, anonymousAccessToken });
+  const spanner = new Spanner.Spanner({
+    projectId: process.env.SPANNER_PROJECT,
+  });
 
   // Gets a reference to a Cloud Spanner instance and database
   const instance = spanner.instance(process.env.SPANNER_INSTANCE);
   const database = instance.database(process.env.SPANNER_DATABASE);
 
   const query = {
-    sql: 'SELECT * FROM Carts',
+    sql: `SELECT * FROM Carts
+            WHERE
+              id = @cartId
+              AND anonymousAccessToken = @anonymousAccessToken
+            LIMIT 1;`,
+    params: { cartId, anonymousAccessToken },
   };
 
-  // Queries rows from the Albums table
   try {
     const [[firstRow]] = await database.run(query);
-    console.log("firstRow", firstRow);
+    if (!firstRow) {
+      return null;
+    }
     const goodRow = firstRow.toJSON();
-    console.log("goodRow", goodRow);
-    console.log("parsing items");
-    goodRow.items = goodRow.items && JSON.parse(goodRow.items);
-    console.log("parsing shipping");
-    goodRow.shipping = goodRow.shipping && JSON.parse(goodRow.shipping);
-    console.log("parsing billing");
-    goodRow.billing = goodRow.billing && JSON.parse(goodRow.billing);
-    console.log("parsing workflow");
-    goodRow.workflow = goodRow.workflow && JSON.parse(goodRow.workflow);
+    goodRow.items = JSON.parse(goodRow.items || null);
+    goodRow.shipping = JSON.parse(goodRow.shipping || null);
+    goodRow.billing = JSON.parse(goodRow.billing || null);
+    goodRow.workflow = JSON.parse(goodRow.workflow || null);
     goodRow._id = goodRow.id;
     return goodRow;
   } catch (err) {
-    console.error('ERROR:', err);
+    console.error("ERROR:", err);
   } finally {
-    // Close the database when finished.
     await database.close();
   }
 }
