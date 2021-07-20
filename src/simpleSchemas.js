@@ -47,6 +47,37 @@ const Metafield = new SimpleSchema({
     optional: true
   }
 });
+export const Geolocation = new SimpleSchema({
+ "latitude": {
+   type: Number
+ },
+ "longitude": {
+   type: Number
+ }
+})
+export const CustomCartAddress = new SimpleSchema({
+ "_id": {
+   type: String,
+   optional: true
+ },
+ "description":{
+   type:String,
+   label: "Description"
+ },
+ "reference":{
+   type:String,
+   label:"Reference",
+   optional:true
+ },
+ "address":{
+   type:String,
+   label:"Address"
+ },
+ "geolocation":{
+   type:Geolocation,
+   label:"geolocation"
+ }
+});
 
 /**
  * @name CartAddress
@@ -546,7 +577,7 @@ const Shipment = new SimpleSchema({
     optional: true
   },
   "address": {
-    type: CartAddress,
+    type: CustomCartAddress,
     optional: true
   },
   "shipmentMethod": {

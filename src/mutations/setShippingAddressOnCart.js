@@ -1,6 +1,6 @@
 import SimpleSchema from "simpl-schema";
 import Random from "@reactioncommerce/random";
-import { CartAddress as AddressSchema } from "../simpleSchemas.js";
+import { CustomCartAddress as AddressSchema } from "../simpleSchemas.js";
 import getCartById from "../util/getCartById.js";
 
 const inputSchema = new SimpleSchema({

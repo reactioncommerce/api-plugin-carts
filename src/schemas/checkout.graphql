@@ -5,7 +5,7 @@
 "Information needed by the selected fulfillment method to properly fulfill the order"
 type FulfillmentData {
   "The mailing address to which this fulfillment group should be shipped"
-  shippingAddress: Address
+  shippingAddress: CustomAddress
 }
 
 "A fulfillment option for a cart fulfillment group, which is a method with an associated price"
@@ -46,7 +46,7 @@ type FulfillmentGroup implements Node {
   selectedFulfillmentOption: FulfillmentOption
 
   "The shipping address collected for this group, if relevant"
-  shippingAddress: Address
+  shippingAddress: CustomAddress
 
   "The shop that owns the items in this group and is responsible for fulfillment"
   shop: Shop!
@@ -60,7 +60,7 @@ type FulfillmentGroup implements Node {
 "Input needed when setting the shipping address on a cart"
 input SetShippingAddressOnCartInput {
   "The shipping address"
-  address: AddressInput!
+  address: CustomAddressInput!
 
   "If set, this will be saved as the Address._id. Otherwise an ID will be generated."
   addressId: String
