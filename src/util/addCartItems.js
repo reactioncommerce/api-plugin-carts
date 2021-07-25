@@ -124,6 +124,7 @@ export default async function addCartItems(context, currentItems, inputItems, op
         currencyCode: price.currencyCode
       },
       productId,
+      imageURLs:catalogProduct.primaryImage.URLs,
       productSlug: catalogProduct.slug,
       productVendor: catalogProduct.vendor,
       productType: catalogProduct.type,

@@ -669,6 +669,23 @@ const CartItemAttribute = new SimpleSchema({
     optional: true
   }
 });
+const ImageSizes = new SimpleSchema({
+  "large":{
+    type: String
+  },
+   "medium":{
+    type: String
+  },
+  "original":{
+    type: String
+  },
+  "small":{
+    type: String
+  },
+  "thumbnail":{
+    type: String
+  },
+});
 
 /**
  * @name CartItem
@@ -695,6 +712,7 @@ const CartItemAttribute = new SimpleSchema({
  * @property {String} variantId required
  * @property {String} variantTitle Title from the selected variant
  */
+
 export const CartItem = new SimpleSchema({
   "_id": String,
   "addedAt": Date,
@@ -708,6 +726,9 @@ export const CartItem = new SimpleSchema({
     optional: true
   },
   "createdAt": Date,
+  "imageURLs":{
+    type:ImageSizes
+  },
   "metafields": {
     type: Array,
     optional: true
