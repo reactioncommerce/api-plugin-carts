@@ -83,6 +83,8 @@ export default async function xformCartCheckout(collections, cart) {
   // If there are no selected shipping methods, fulfillmentTotal should be null
   let fulfillmentGroups = cart.shipping || [];
   let fulfillmentTotal = null;
+  let billing = cart.billingDetails || null;
+  let giftNote = cart.giftNote || null;
   if (fulfillmentGroups.length > 0) {
     let shippingTotal = 0;
     let handlingTotal = 0;
@@ -168,6 +170,8 @@ export default async function xformCartCheckout(collections, cart) {
         amount: total,
         currencyCode: cart.currencyCode
       }
-    }
+    },
+    billing,
+    giftNote
   };
 }

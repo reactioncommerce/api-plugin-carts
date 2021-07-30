@@ -75,7 +75,8 @@ export const CustomCartAddress = new SimpleSchema({
  },
  "geolocation":{
    type:Geolocation,
-   label:"geolocation"
+   label:"geolocation",
+   optional:true
  }
 });
 
@@ -794,7 +795,43 @@ export const CartItem = new SimpleSchema({
     optional: true
   }
 });
-
+export const BillingDetails = new SimpleSchema({
+  customerName: {
+      type: String,
+      optional: true
+  },
+  nit:{
+      type: String,
+      max: 9,
+      optional: true
+  },
+  address:{
+      type: String,
+      optional:true
+    }
+  });
+ /**
+ * @name Gift
+ * @memberof Schemas
+ * @type {SimpleSchema}
+ * @property {String} sender optional
+ * @property {String} receiver optional
+ * @property {String} message optional
+ */
+export const Gift = new SimpleSchema({
+  sender: {
+      type: String,
+      optional:true
+  },
+  receiver: {
+      type: String,
+      optional:true
+  },
+  message: {
+      type: String,
+      optional:true
+  }
+}) 
 /**
  * @name Cart
  * @memberof Schemas
@@ -907,5 +944,13 @@ export const Cart = new SimpleSchema({
   "updatedAt": {
     type: Date,
     optional: true
+  },
+  "billingDetails":{
+    type: BillingDetails,
+    optional:true
+  },
+  "giftNote":{
+    type: Gift,
+    optional:true
   }
 });
