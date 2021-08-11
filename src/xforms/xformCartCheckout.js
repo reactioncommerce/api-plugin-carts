@@ -51,12 +51,12 @@ function xformCartFulfillmentGroup(fulfillmentGroup, cart) {
       }
     };
   }
-
   return {
     _id: fulfillmentGroup._id,
     availableFulfillmentOptions,
     data: {
-      shippingAddress: fulfillmentGroup.address
+      shippingAddress: fulfillmentGroup?.address || null,
+      pickupDetails: fulfillmentGroup?.pickupDetails || null
     },
     // For now, we only ever set one fulfillment group, so it has all of the items.
     // Revisit when the UI supports breaking into multiple groups.
@@ -65,7 +65,7 @@ function xformCartFulfillmentGroup(fulfillmentGroup, cart) {
     shippingAddress: fulfillmentGroup.address,
     shopId: fulfillmentGroup.shopId,
     // For now, this is always shipping. Revisit when adding download, pickup, etc. types
-    type: "shipping"
+    type: fulfillmentGroup.type
   };
 }
 

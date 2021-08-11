@@ -564,7 +564,7 @@ export const CartInvoice = new SimpleSchema({
  * @property {String} customsLabelUrl For customs printable label
  * @property {ShippoShipment} shippo For Shippo specific properties
  */
-const Shipment = new SimpleSchema({
+export const Shipment = new SimpleSchema({
   "_id": {
     type: String,
     label: "Shipment Id"
