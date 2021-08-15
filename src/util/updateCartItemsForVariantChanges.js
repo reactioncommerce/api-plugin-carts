@@ -15,6 +15,18 @@ export default function updateCartItemsForVariantChanges(items, catalogProductVa
   const updatedItems = items.map((item) => {
     if (item.variantId !== catalogProductVariant.variantId) return item;
 
+    // if categoryVariant has changed
+    if(item.categoryVariant !== catalogProductVariant.categoryVariant){
+      didUpdate = true;
+      item.categoryVariant = catalogProductVariant.categoryVariant;
+    }
+
+    // if odooProduc has changed
+    if(item.odooProduct !== catalogProductVariant.odooProduct){
+      didUpdate = true;
+      item.odooProduct = catalogProductVariant.odooProduct;
+    }
+
     // If taxCode has changed
     if (item.taxCode !== catalogProductVariant.taxCode) {
       didUpdate = true;

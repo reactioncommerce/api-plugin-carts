@@ -140,7 +140,9 @@ export default async function addCartItems(context, currentItems, inputItems, op
       title: catalogProduct.title,
       updatedAt: currentDateTime,
       variantId: productVariantId,
-      variantTitle: chosenVariant.title
+      variantTitle: chosenVariant.title,
+      odooProduct: chosenVariant.odooProduct,
+      categoryVariant: chosenVariant.categoryVariant
     };
 
     if (variantPriceInfo.compareAtPrice || variantPriceInfo.compareAtPrice === 0) {

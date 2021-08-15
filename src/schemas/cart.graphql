@@ -139,6 +139,11 @@ type CartItem implements Node {
   "The cart item ID"
   _id: ID!
 
+  "Product on the invoice system"
+  odooProduct: Int
+  "category on the invoice system"
+  categoryVariant: Int
+
   """"
   The date and time at which this item was first added to the associated cart.
   If an item is added, removed, and then added again, this will reflect the most recent addition.

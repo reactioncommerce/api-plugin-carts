@@ -715,6 +715,16 @@ const ImageSizes = new SimpleSchema({
  */
 
 export const CartItem = new SimpleSchema({
+  "odooProduct": {
+    type: Number,
+    label: "Odooproduct",
+    optional: true
+  },
+  "categoryVariant": {
+    type: Number,
+    label: "CategoryVariant",
+    optional: true
+  },
   "_id": String,
   "addedAt": Date,
   "attributes": {

@@ -62,7 +62,9 @@ export default async function xformCartGroupToCommonOrder(cart, group, context) 
       taxCode: item.taxCode,
       title: item.title,
       variantId: item.variantId,
-      variantTitle: item.variantTitle
+      variantTitle: item.variantTitle,
+      odooProduct: item.odooProduct,
+      categoryVariant: item.categoryVariant
     };
   }));
 
