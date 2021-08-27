@@ -77,6 +77,10 @@ export const CustomCartAddress = new SimpleSchema({
    type:Geolocation,
    label:"geolocation",
    optional:true
+ },
+ "metaddress": {
+  optional: true,
+  blackbox: true
  }
 });
 
