@@ -55,6 +55,41 @@ export const Geolocation = new SimpleSchema({
    type: Number
  }
 })
+export const DistanceMeta = new SimpleSchema({
+  "value": {
+    type: Number
+  },
+  "text": {
+    type: String
+  }
+})
+
+export const Metaddress = new SimpleSchema({
+  "administrative_area_level_1":{
+    type: String,
+    optional: true
+  },
+  "administrative_area_level_2":{
+    type: String,
+    optional: true
+  },
+  "neighborhood":{
+    type: String,
+    optional: true
+  },
+  "street_address":{
+    type: String,
+    optional: true
+  },
+  "sublocality":{
+    type: String,
+    optional: true
+  },
+  "distance":{
+    type: DistanceMeta,
+    optional: true
+  }
+})
 export const CustomCartAddress = new SimpleSchema({
  "_id": {
    type: String,
@@ -79,10 +114,9 @@ export const CustomCartAddress = new SimpleSchema({
    optional:true
  },
  "metaddress": {
-  type: Object,
-  optional: true,
-  blackbox: true
- }
+  type: Metaddress,
+  optional: true
+  }
 });
 
 /**
