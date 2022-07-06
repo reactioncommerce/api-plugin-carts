@@ -230,6 +230,9 @@ type CartItem implements Node {
   "A title for use in cart/orders that conveys the selected product's title + chosen options"
   title: String!
 
+  "The fulfillment type of the item (if implemented in UI & selected by user) while adding item to cart"
+  selectedFulfillmentType: String
+
   "The date and time at which this item was last updated"
   updatedAt: DateTime!
 
@@ -314,6 +317,9 @@ input CartItemInput {
 
   "The number of this item to add to the cart"
   quantity: Int!
+
+  "The fulfillment type of the item (if implemented in UI & selected by user) while adding item to cart"
+  selectedFulfillmentType: String
 }
 
 "Input that defines a single configuration of a product"

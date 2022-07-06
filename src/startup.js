@@ -89,6 +89,41 @@ async function updateAllCartsForVariant({ Cart, context, variant }) {
 }
 
 /**
+ * @summary Extend the schema with updated allowedValues
+ * @param {Object} context Startup context
+ * @returns {undefined}
+ */
+ async function extendSchemas(context) {
+  const allFulfillmentTypesArray = await context.queries.allFulfillmentTypes(context);
+
+  if (!allFulfillmentTypesArray || allFulfillmentTypesArray.length === 0){
+    Logger.warn("No fulfillment types available, setting 'shipping' as default");
+    allFulfillmentTypesArray = ['shipping'];
+  }
+
+  const { simpleSchemas: { Shipment, CartItem } } = context;
+  const schemaShipmentExtension = {
+    type: {
+      type: String,
+      allowedValues: allFulfillmentTypesArray,
+      defaultValue: allFulfillmentTypesArray[0]
+    }
+  }
+  Shipment.extend(schemaShipmentExtension);
+
+  const schemaCartItemExtension = {
+    "supportedFulfillmentTypes": {
+      type: Array
+    },
+    "supportedFulfillmentTypes.$": {
+      type: String,
+      allowedValues: allFulfillmentTypesArray,
+    },
+  }
+  CartItem.extend(schemaCartItemExtension);
+}
+
+/**
  * @summary Called on startup
  * @param {Object} context Startup context
  * @param {Object} context.collections Map of MongoDB collections
@@ -97,6 +132,8 @@ async function updateAllCartsForVariant({ Cart, context, variant }) {
 export default async function cartStartup(context) {
   const { appEvents, collections } = context;
   const { Cart } = collections;
+
+  await extendSchemas(context);
 
   // When an order is created, delete the source cart
   appEvents.on("afterOrderCreate", async ({ order }) => {

@@ -21,6 +21,10 @@ const inputItemSchema = new SimpleSchema({
   "price.amount": {
     type: Number,
     optional: true
+  },
+  "selectedFulfillmentType": {
+    type: String,
+    optional: true
   }
 });
 
@@ -47,7 +51,7 @@ export default async function addCartItems(context, currentItems, inputItems, op
   const currentDateTime = new Date();
 
   const promises = inputItems.map(async (inputItem) => {
-    const { metafields, productConfiguration, quantity, price } = inputItem;
+    const { metafields, productConfiguration, quantity, price, selectedFulfillmentType } = inputItem;
     const { productId, productVariantId } = productConfiguration;
 
     // Get the published product from the DB, in order to get variant title and check price.
@@ -111,6 +115,8 @@ export default async function addCartItems(context, currentItems, inputItems, op
       compareAtPrice: null,
       isTaxable: chosenVariant.isTaxable || false,
       metafields,
+      supportedFulfillmentTypes: catalogProduct.supportedFulfillmentTypes,
+      selectedFulfillmentType,
       optionTitle: chosenVariant.optionTitle,
       parcel: chosenVariant.parcel,
       // This one will be kept updated by event handler watching for

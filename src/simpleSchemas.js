@@ -532,7 +532,7 @@ export const CartInvoice = new SimpleSchema({
  * @property {String} customsLabelUrl For customs printable label
  * @property {ShippoShipment} shippo For Shippo specific properties
  */
-const Shipment = new SimpleSchema({
+export const Shipment = new SimpleSchema({
   "_id": {
     type: String,
     label: "Shipment Id"
@@ -570,11 +570,12 @@ const Shipment = new SimpleSchema({
     type: String,
     optional: true
   },
-  "type": {
-    type: String,
-    allowedValues: ["shipping"],
-    defaultValue: "shipping"
-  },
+  // type extended in startup with dynamic allowedValues
+  // "type": {
+  //   type: String,
+  //   allowedValues: ["shipping"],
+  //   defaultValue: "shipping"
+  // },
   "parcel": {
     type: ShippingParcel,
     optional: true
@@ -661,6 +662,7 @@ const CartItemAttribute = new SimpleSchema({
  * @property {String} title Cart Item title
  * @property {Object} transaction Transaction associated with this item
  * @property {String} updatedAt required
+ * @property {String} selectedFulfillmentType Fulfillment Type (if selected/passed from UI)
  * @property {String} variantId required
  * @property {String} variantTitle Title from the selected variant
  */
@@ -733,6 +735,11 @@ export const CartItem = new SimpleSchema({
     blackbox: true
   },
   "updatedAt": Date,
+  "selectedFulfillmentType": {
+    type: String,
+    defaultValue: "",
+    optional: true
+  },
   "variantId": {
     type: String,
     optional: true
