@@ -28,7 +28,7 @@ function determineInitialGroupForItem(currentGroups, supportedFulfillmentTypes, 
       _id: Random.id(),
       itemIds: [item._id],
       shopId: item.shopId,
-      type: fulfillmentType,
+      type: fulfillmentType
     });
   } else if (!group.itemIds) {
     // If there is a compatible group but it has no items array, add one with just this item in it
