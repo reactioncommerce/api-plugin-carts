@@ -17,10 +17,10 @@ function determineInitialGroupForItem(currentGroups, supportedFulfillmentTypes, 
  * @summary Check if the provided fulfillment type is present in any of the groups and adds if not
  * @param {Object[]} currentGroups The current cart fulfillment groups array
  * @param {String} fulfillmentType Specific fulfillment type to be checked
- * @param {String} shopId The ID of the shop that owns the item (product)
+ * @param {Object} item The item (product) object
  * @returns {undefined}
  */
- function checkAndAddToGroup(currentGroups, fulfillmentType, item) {
+function checkAndAddToGroup(currentGroups, fulfillmentType, item) {
   const group = determineInitialGroupForItem(currentGroups, [fulfillmentType], item.shopId);
   if (!group) {
     // If no compatible group, add one with initially just this item in it
@@ -49,8 +49,8 @@ export default function updateCartFulfillmentGroups(context, cart) {
   // Every time the cart is updated, create any missing fulfillment groups as necessary.
   // We need one group per type per shop, containing only the items from that shop.
   // Also make sure that every item is assigned to a fulfillment group.
-  // Update: Refer MCOSS-52: 
-  // 1. If the selectedFulfillmentType is not provided for an item, then 
+  // Update: Refer MCOSS-52:
+  // 1. If the selectedFulfillmentType is not provided for an item, then
   //    that item should be present in all groups corresponding to it's supportedFulfillmentTypes
   //    If selectedFulfillmentType is provided, we keep the item only in that group.
 
@@ -59,9 +59,9 @@ export default function updateCartFulfillmentGroups(context, cart) {
   (cart.items || []).forEach((item) => {
     let { supportedFulfillmentTypes } = item;
 
-    // This is a new optional field that UI can pass in case the user selects fulfillment type 
+    // This is a new optional field that UI can pass in case the user selects fulfillment type
     // for each item in the product details page instead of waiting till checkout
-    let { selectedFulfillmentType } = item; 
+    const { selectedFulfillmentType } = item;
 
     // Do not re-allocate the item if it is already in the group. Otherwise difficult for other code
     // to create and manage fulfillment groups
@@ -80,7 +80,7 @@ export default function updateCartFulfillmentGroups(context, cart) {
     if (selectedFulfillmentType) {
       checkAndAddToGroup(currentGroups, selectedFulfillmentType, item);
     } else {
-      supportedFulfillmentTypes.forEach(ffType => {
+      supportedFulfillmentTypes.forEach((ffType) => {
         checkAndAddToGroup(currentGroups, ffType, item);
       });
     }

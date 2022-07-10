@@ -96,7 +96,7 @@ async function updateAllCartsForVariant({ Cart, context, variant }) {
 async function extendSchemas(context) {
   let allFulfillmentTypesArray = await context.queries.allFulfillmentTypes(context);
 
-  if (!allFulfillmentTypesArray || allFulfillmentTypesArray.length === 0){
+  if (!allFulfillmentTypesArray || allFulfillmentTypesArray.length === 0) {
     Logger.warn("No fulfillment types available, setting 'shipping' as default");
     allFulfillmentTypesArray = ["shipping"];
   }
@@ -108,7 +108,7 @@ async function extendSchemas(context) {
       allowedValues: allFulfillmentTypesArray,
       defaultValue: allFulfillmentTypesArray[0]
     }
-  }
+  };
   Shipment.extend(schemaShipmentExtension);
 
   const schemaCartItemExtension = {
