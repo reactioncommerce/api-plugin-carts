@@ -192,6 +192,7 @@ const ShippoShippingMethod = new SimpleSchema({
  * @type {SimpleSchema}
  * @property {String} _id Shipment method Id
  * @property {String} name Method name
+ * @property {String} fulfillmentMethod Method name common identifier
  * @property {String} label Public label
  * @property {String} group Group, allowed values: `Ground`, `Priority`, `One Day`, `Free`
  * @property {Number} cost optional
@@ -224,6 +225,11 @@ const ShippingMethod = new SimpleSchema({
   "label": {
     type: String,
     label: "Public Label"
+  },
+  "fulfillmentMethod": {
+    type: String,
+    optional: true,
+    label: "Method name Common identifier"
   },
   "group": {
     type: String,
