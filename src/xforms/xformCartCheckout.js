@@ -65,7 +65,7 @@ function xformCartFulfillmentGroup(fulfillmentGroup, cart) {
     shippingAddress: fulfillmentGroup.address,
     shopId: fulfillmentGroup.shopId,
     // For now, this is always shipping. Revisit when adding download, pickup, etc. types
-    type: "shipping"
+    type: fulfillmentGroup.type
   };
 }
 
