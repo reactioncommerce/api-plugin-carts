@@ -45,6 +45,5 @@ export default async function transformAndValidateCart(context, cart) {
     /* eslint-enable no-await-in-loop */
     Logger.debug({ ...logCtx, cartId: cart._id, ms: Date.now() - startTime }, `Finished ${transformInfo.name} cart transform`);
   });
-
   cartSchema.validate(cart);
 }

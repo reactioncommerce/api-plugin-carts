@@ -62,7 +62,8 @@ export default async function xformCartGroupToCommonOrder(cart, group, context) 
       taxCode: item.taxCode,
       title: item.title,
       variantId: item.variantId,
-      variantTitle: item.variantTitle
+      variantTitle: item.variantTitle,
+      discounts: item.discounts
     };
   }));
 
@@ -97,7 +98,12 @@ export default async function xformCartGroupToCommonOrder(cart, group, context) 
 
   // TODO: In the future, we should update this with a discounts update
   // Discounts are stored as the sum of all discounts, per cart. This will need to be updated when we refactor discounts to go by group.
-  const discountTotal = cart.discount || 0;
+  const discountTotalFunctions = context.getFunctionsOfType("calculateDiscountTotal");
+  let discountTotal = 0;
+  for (const discountTotalFunction of discountTotalFunctions) {
+    const thisDiscountTotal = discountTotalFunction(context, cart);
+    discountTotal += thisDiscountTotal;
+  }
   const groupItemTotal = +accounting.toFixed(items.reduce((sum, item) => (sum + item.subtotal.amount), 0), 3);
   // orderItemTotal will need to be updated to be the actual total when we eventually have more than one group available
   const orderItemTotal = groupItemTotal;
@@ -129,8 +135,9 @@ export default async function xformCartGroupToCommonOrder(cart, group, context) 
     }
   };
 
-
-  return {
+  const matchingShippingGroup = cart.shipping.find((thisGroup) => thisGroup._id === group._id);
+  const discounts = matchingShippingGroup.discounts || [];
+  const commonOrder = {
     accountId,
     billingAddress: null,
     cartId: cart._id,
@@ -144,6 +151,8 @@ export default async function xformCartGroupToCommonOrder(cart, group, context) 
     shippingAddress: address || null,
     shopId,
     sourceType: "cart",
-    totals
+    totals,
+    discounts
   };
+  return commonOrder;
 }

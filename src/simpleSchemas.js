@@ -211,7 +211,7 @@ const ShippoShippingMethod = new SimpleSchema({
  * @property {String} carrier optional
  * @property {ShippoShippingMethod} settings optional
  */
-const ShippingMethod = new SimpleSchema({
+export const ShippingMethod = new SimpleSchema({
   "_id": {
     type: String,
     label: "Shipment Method Id"
@@ -247,6 +247,10 @@ const ShippingMethod = new SimpleSchema({
     type: Number,
     label: "Rate",
     min: 0
+  },
+  "undiscountedRate": {
+    type: Number,
+    optional: true
   },
   "enabled": {
     type: Boolean,
@@ -337,6 +341,10 @@ export const ShipmentQuote = new SimpleSchema({
   rate: {
     type: Number,
     defaultValue: 0.00
+  },
+  undiscountedRate: {
+    type: Number,
+    optional: true
   },
   shippingPrice: {
     type: Number,
@@ -508,6 +516,62 @@ export const CartInvoice = new SimpleSchema({
   }
 });
 
+const Event = new SimpleSchema({
+  type: String,
+  params: {
+    type: Object,
+    optional: true
+  }
+});
+
+
+export const Rules = new SimpleSchema({
+  conditions: {
+    type: Object,
+    blackbox: true
+  },
+  event: {
+    type: Event
+  }
+});
+
+const CartDescriptionByLanguage = new SimpleSchema({
+  content: String,
+  language: String
+});
+
+export const CartDiscount = new SimpleSchema({
+  "_id": String,
+  "discountLabel": String,
+  "cartDescriptionByLanguage": {
+    type: Array
+  },
+  "cartDescriptionByLanguage.$": {
+    type: CartDescriptionByLanguage
+  },
+  "inclusionRules": { // because shipping discounts are evaluated later, they need to have inclusion rules on them
+    type: Rules,
+    optional: true
+  },
+  "exclusionRules": {
+    type: Rules,
+    optional: true
+  },
+  "discountCalculationType": String, // types provided by this plugin are flat, percentage and fixed
+  "discountValue": Number,
+  "taxReported": {
+    type: Boolean,
+    defaultValue: true
+  },
+  "dateApplied": {
+    type: Date
+  },
+  "dateExpires": {
+    type: Date,
+    optional: true
+  }
+});
+
 /**
  * @name Shipment
  * @summary Used for cart/order shipment tracking
@@ -532,7 +596,7 @@ export const CartInvoice = new SimpleSchema({
  * @property {String} customsLabelUrl For customs printable label
  * @property {ShippoShipment} shippo For Shippo specific properties
  */
-const Shipment = new SimpleSchema({
+export const Shipment = new SimpleSchema({
   "_id": {
     type: String,
     label: "Shipment Id"
@@ -613,6 +677,15 @@ const Shipment = new SimpleSchema({
   "shippo": {
     type: ShippoShipment,
     optional: true
+  },
+  "discounts": {
+    type: Array,
+    defaultValue: [],
+    optional: true
+  },
+  "discounts.$": {
+    type: CartDiscount,
+    optional: true
   }
 });
 
@@ -623,6 +696,7 @@ const Money = new SimpleSchema({
     min: 0
   }
 });
+
 
 /**
  * @name CartItemAttribute
@@ -740,6 +814,15 @@ export const CartItem = new SimpleSchema({
   "variantTitle": {
     type: String,
     optional: true
+  },
+  "discounts": {
+    type: Array,
+    label: "Item Discounts",
+    defaultValue: [],
+    optional: true
+  },
+  "discounts.$": {
+    type: CartDiscount
   }
 });
 
@@ -832,10 +915,6 @@ export const Cart = new SimpleSchema({
     optional: true,
     defaultValue: false
   },
-  "discount": {
-    type: Number,
-    optional: true
-  },
   "surcharges": {
     type: Array,
     optional: true
@@ -855,5 +934,19 @@ export const Cart = new SimpleSchema({
   "updatedAt": {
     type: Date,
     optional: true
+  },
+  "discounts": {
+    type: Array,
+    label: "Order Discount",
+    defaultValue: [],
+    optional: true
+  },
+  "discounts.$": {
+    type: CartDiscount
+  },
+  "discount": {
+    type: Number,
+    label: "Legacy order discount",
+    defaultValue: 0.00
   }
 });

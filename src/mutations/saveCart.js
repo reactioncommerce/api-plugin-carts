@@ -5,9 +5,10 @@ import ReactionError from "@reactioncommerce/reaction-error";
  *   validates, and upserts to database.
  * @param {Object} context - App context
  * @param {Object} cart - The cart to transform and insert or replace
+ * @param {Boolean} suppressEvent - Whether it should suppress emitting an event
  * @returns {Object} Transformed and saved cart
  */
-export default async function saveCart(context, cart) {
+export default async function saveCart(context, cart, suppressEvent = false) {
   const { appEvents, collections: { Cart }, userId = null } = context;
 
   // These will mutate `cart`
@@ -17,12 +18,12 @@ export default async function saveCart(context, cart) {
   const { result, upsertedCount } = await Cart.replaceOne({ _id: cart._id }, cart, { upsert: true });
   if (result.ok !== 1) throw new ReactionError("server-error", "Unable to save cart");
 
-  if (upsertedCount === 1) {
+  if (upsertedCount === 1 && !suppressEvent) {
     appEvents.emit("afterCartCreate", {
       cart,
       createdBy: userId
     });
-  } else {
+  } else if (!suppressEvent) {
     appEvents.emit("afterCartUpdate", {
       cart,
       updatedBy: userId
