@@ -248,10 +248,6 @@ export const ShippingMethod = new SimpleSchema({
     label: "Rate",
     min: 0
   },
-  "undiscountedRate": {
-    type: Number,
-    optional: true
-  },
   "enabled": {
     type: Boolean,
     label: "Enabled",
@@ -535,42 +531,6 @@ export const Rules = new SimpleSchema({
   }
 });
 
-const CartDescriptionByLanguage = new SimpleSchema({
-  content: String,
-  language: String
-});
-
-export const CartDiscount = new SimpleSchema({
-  "_id": String,
-  "discountLabel": String,
-  "cartDescriptionByLanguage": {
-    type: Array
-  },
-  "cartDescriptionByLanguage.$": {
-    type: CartDescriptionByLanguage
-  },
-  "inclusionRules": { // because shipping discounts are evaluated later, they need to have inclusion rules on them
-    type: Rules,
-    optional: true
-  },
-  "exclusionRules": {
-    type: Rules,
-    optional: true
-  },
-  "discountCalculationType": String, // types provided by this plugin are flat, percentage and fixed
-  "discountValue": Number,
-  "taxReported": {
-    type: Boolean,
-    defaultValue: true
-  },
-  "dateApplied": {
-    type: Date
-  },
-  "dateExpires": {
-    type: Date,
-    optional: true
-  }
-});
 
 /**
  * @name Shipment
@@ -676,15 +636,6 @@ export const Shipment = new SimpleSchema({
   },
   "shippo": {
     type: ShippoShipment,
-    optional: true
-  },
-  "discounts": {
-    type: Array,
-    defaultValue: [],
-    optional: true
-  },
-  "discounts.$": {
-    type: CartDiscount,
     optional: true
   }
 });
@@ -814,15 +765,6 @@ export const CartItem = new SimpleSchema({
   "variantTitle": {
     type: String,
     optional: true
-  },
-  "discounts": {
-    type: Array,
-    label: "Item Discounts",
-    defaultValue: [],
-    optional: true
-  },
-  "discounts.$": {
-    type: CartDiscount
   }
 });
 
@@ -934,19 +876,5 @@ export const Cart = new SimpleSchema({
   "updatedAt": {
     type: Date,
     optional: true
-  },
-  "discounts": {
-    type: Array,
-    label: "Order Discount",
-    defaultValue: [],
-    optional: true
-  },
-  "discounts.$": {
-    type: CartDiscount
-  },
-  "discount": {
-    type: Number,
-    label: "Legacy order discount",
-    defaultValue: 0.00
   }
 });
