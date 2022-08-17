@@ -95,7 +95,7 @@ async function updateAllCartsForVariant({ Cart, context, variant }) {
  * @returns {undefined}
  */
 export default async function cartStartup(context) {
-  const { appEvents, collections } = context;
+  const { appEvents, collections, simpleSchemas: { Cart: CartSchema, CartItem: CartItemSchema } } = context;
   const { Cart } = collections;
 
   // When an order is created, delete the source cart

@@ -43,7 +43,7 @@ export default async function updateCartItemsQuantity(context, input) {
     if (!update) {
       list.push({ ...item });
     } else if (update.quantity > 0) {
-      // Update quantity as instructed, while omitting the item if quantity is 0
+      // Update quantity as instructed, while omitting the item if quantity is 0`
       list.push({
         ...item,
         quantity: update.quantity,

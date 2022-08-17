@@ -211,7 +211,7 @@ const ShippoShippingMethod = new SimpleSchema({
  * @property {String} carrier optional
  * @property {ShippoShippingMethod} settings optional
  */
-const ShippingMethod = new SimpleSchema({
+export const ShippingMethod = new SimpleSchema({
   "_id": {
     type: String,
     label: "Shipment Method Id"
@@ -337,6 +337,10 @@ export const ShipmentQuote = new SimpleSchema({
   rate: {
     type: Number,
     defaultValue: 0.00
+  },
+  undiscountedRate: {
+    type: Number,
+    optional: true
   },
   shippingPrice: {
     type: Number,
@@ -508,6 +512,26 @@ export const CartInvoice = new SimpleSchema({
   }
 });
 
+const Event = new SimpleSchema({
+  type: String,
+  params: {
+    type: Object,
+    optional: true
+  }
+});
+
+
+export const Rules = new SimpleSchema({
+  conditions: {
+    type: Object,
+    blackbox: true
+  },
+  event: {
+    type: Event
+  }
+});
+
+
 /**
  * @name Shipment
  * @summary Used for cart/order shipment tracking
@@ -532,7 +556,7 @@ export const CartInvoice = new SimpleSchema({
  * @property {String} customsLabelUrl For customs printable label
  * @property {ShippoShipment} shippo For Shippo specific properties
  */
-const Shipment = new SimpleSchema({
+export const Shipment = new SimpleSchema({
   "_id": {
     type: String,
     label: "Shipment Id"
@@ -623,6 +647,7 @@ const Money = new SimpleSchema({
     min: 0
   }
 });
+
 
 /**
  * @name CartItemAttribute
@@ -831,10 +856,6 @@ export const Cart = new SimpleSchema({
     type: Boolean,
     optional: true,
     defaultValue: false
-  },
-  "discount": {
-    type: Number,
-    optional: true
   },
   "surcharges": {
     type: Array,
